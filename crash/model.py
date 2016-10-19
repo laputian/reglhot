@@ -59,7 +59,7 @@ def trade_run_iterate(investors, num_sell_success = 1, num_sell_fail = 2,  init_
 def gauss(x, mu, sig):
     return np.exp(-np.power(x - mu, 2.) / (2 * np.power(sig, 2.)))
 
-def test_run(init_price = 85., num_sell_success = 1, num_sell_fail = 1,
+def test_run(init_price = 125., num_sell_success = 1, num_sell_fail = 1,
              the_seed = 393, tot_runs = 1000, nr_investors = 20, cash_base=300. ):
     print("Init: "+ str(nr_investors) + " investors, initial price = "+ str(init_price))
     seed(the_seed)
@@ -78,7 +78,7 @@ def test_run(init_price = 85., num_sell_success = 1, num_sell_fail = 1,
     plt.scatter(a, b, s=80, facecolors='none', edgecolors='r', label='Total value initial')
     plt.scatter(a, c, color='r', label='Initial cash')
 
-    plot_arr = trade_run_iterate(investors, init_price = 85.,
+    plot_arr = trade_run_iterate(investors, init_price = init_price,
                   num_sell_success=num_sell_success, num_sell_fail=num_sell_fail,  runs=tot_runs, secu = secu )
 
     print("Final")
@@ -95,7 +95,8 @@ def test_run(init_price = 85., num_sell_success = 1, num_sell_fail = 1,
     plt.scatter(x, z, color='g', label='Final cash')
     plt.xticks(np.arange(1, len(investors) + 1, 1.0))
     plt.xlim(0, nr_investors + 1)
-    plt.title("Assets and cash distribution per investor \n Init. price = " + str(init_price))
+    plt.title("Assets and cash distribution per investor \n Init. price = " + str(init_price)
+              + " , num. sell on fail = " + str(num_sell_fail))
 
     plt.legend(loc = 2 ,scatterpoints = 1, prop={'size':10})
     plt.show()
@@ -117,7 +118,8 @@ def test_run(init_price = 85., num_sell_success = 1, num_sell_fail = 1,
     plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
                  np.exp( - (bins - mu)**2 / (2 * sigma**2) ),
             linewidth=2, color='r')
-    plt.title("Mean = "+str(mu) + " , std ="+str(sigma) +"\n Init. price = " + str(init_price))
+    plt.title("Mean = "+str(mu) + " , std ="+str(sigma) +"\n Init. price = " + str(init_price)
+              + " , num. sell on fail = " + str(num_sell_fail))
     plt.xlabel("Jump size vs. frequency distribution \n Kurtosis test p-value = "+str(kurtosistest(plot_diffs)[1]))
     plt.ylabel("Jump Frequency")
 
