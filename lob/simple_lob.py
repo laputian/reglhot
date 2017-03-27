@@ -7,6 +7,8 @@ tick_size = 2.
 lob_tick_depth = 0 * np.ones(lob_dim)
 lob = start_book_depth + (lob_tick_depth * np.ones(lob_dim))
 
+print_diagnostics = False
+
 ord_range = (lob_dim - 1)//2
 
 ord_load = 61
@@ -24,11 +26,12 @@ def extrinRange(lob, the_range):
 
 def midPrice(lob, buy_range, sell_range):
     buy_min = start_midPrice + tick_size * (extrinRange(lob, buy_range) - ord_range)
-    print('extr in buy range',extrinRange(lob, buy_range))
-    print('buy_min', buy_min)
     sell_max = start_midPrice - tick_size * (ord_range - extrinRange(lob, sell_range))
-    print('extr in sell range', extrinRange(lob, sell_range))
-    print('sell_max', sell_max)
+    if print_diagnostics:
+        print('extr in sell range', extrinRange(lob, sell_range))
+        print('sell_max', sell_max)
+        print('extr in buy range',extrinRange(lob, buy_range))
+        print('buy_min', buy_min)
     return (buy_min + sell_max)/2.
 
 
@@ -40,7 +43,8 @@ def lob_order(lob, the_range, ord_residual):
         if ord_hold <= 0. :
             break
         ord_residual = ord_hold
-    print(lob)
+    if print_diagnostics:
+        print(lob)
     return lob
 
 if order[0] == 'B':
@@ -58,7 +62,8 @@ def market_run(lob = lob, test_range = 50, buy_range = buy_range, sell_range = s
             the_range = buy_range
         lob = lob_order(lob, the_range, ord_load)
         mid = midPrice(lob, buy_range, sell_range)
-        print('mid', mid)
+        if print_diagnostics:
+            print('mid', mid)
         mids.append(mid)
     return mids
 
@@ -73,8 +78,11 @@ def show_mids(mids):
     plt.ylim(80,120)
     plt.show()
 
-mids = market_run(lob,  100, buy_range , sell_range)
-show_mids(mids = mids)
+if __name__ == "__main__":
+    mids = market_run(lob, 100, buy_range, sell_range)
+    show_mids(mids=mids)
+
+
 
 
 
