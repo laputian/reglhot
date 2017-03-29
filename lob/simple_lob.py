@@ -11,7 +11,7 @@ print_diagnostics = True
 
 ord_range = (lob_dim - 1)//2
 
-ord_load = 45
+ord_load = 115
 
 order = ['S', ord_load]
 
@@ -24,7 +24,7 @@ def extrinRange(lob, the_range):
             return k
     return -1
 
-def midPrice(lob, buy_range, sell_range):
+def midPrice(lob, buy_range, sell_range, ord_range = ord_range):
     buy_min = start_midPrice + tick_size * (extrinRange(lob, buy_range) - ord_range)
     sell_max = start_midPrice - tick_size * (ord_range - extrinRange(lob, sell_range))
     if print_diagnostics:
@@ -46,6 +46,7 @@ def lob_order(lob, the_range, ord_residual):
     if print_diagnostics:
         print(lob)
     return lob
+
 
 if order[0] == 'B':
     the_range = buy_range

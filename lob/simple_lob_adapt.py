@@ -28,7 +28,7 @@ def extrinRange(lob, the_range):
             return k
     return -1
 
-def midPrice(lob, buy_range, sell_range):
+def midPrice(lob, buy_range, sell_range, ord_range = ord_range):
     buy_min = start_midPrice + tick_size * (extrinRange(lob, buy_range) - ord_range)
     sell_max = start_midPrice - tick_size * (ord_range - extrinRange(lob, sell_range))
     if print_diagnostics:
@@ -38,8 +38,13 @@ def midPrice(lob, buy_range, sell_range):
         print('buy_min', buy_min)
     return (buy_min + sell_max)/2.
 
+def resetLob(lob, buy_range, sell_range):
+    buy_index = extrinRange(lob, buy_range)
+    sell_index = extrinRange(lob, sell_range)
+    print(buy_index, sell_index)
 
-def lob_order(lob, the_range, ord_residual):
+
+def lob_order(lob, the_range, ord_residual, ord_range = ord_range):
     for k in the_range:
         lob_new =  lob[k] - ord_residual
         ord_hold =  - lob_new
@@ -47,8 +52,13 @@ def lob_order(lob, the_range, ord_residual):
         if ord_hold <= 0. :
             break
         ord_residual = ord_hold
+    extr = extrinRange(lob, the_range)
+    step = ord_range - extr + 1
+    for h in range(step if step > 1 else 0):
+        lob[ord_range - h] = lob[ord_range - h -1]
     if print_diagnostics:
         print(lob)
+        print('extreme for this order', extrinRange(lob, the_range))
     return lob
 
 
