@@ -1,18 +1,22 @@
 import numpy as np
 
-lob_dim = 80
+lob_dim = 10
 start_book_depth = 110.
 start_midPrice = 100.
-tick_size = 1.
+tick_size = 5.
 lob = start_book_depth + np.zeros(lob_dim)
+num_step =10
 
-print_diagnostics = False
+print_diagnostics = True
 
 ord_range = (lob_dim - 1)//2
 
-ord_load = 61
+ord_load = 45
 
 order = ['S', ord_load]
+
+if print_diagnostics:
+    print(lob)
 
 buy_range = range(ord_range + 1, lob_dim)
 sell_range = range(ord_range, 0, -1)
@@ -46,25 +50,23 @@ def lob_order(lob, the_range, ord_residual):
         print(lob)
     return lob
 
-if order[0] == 'B':
-    the_range = buy_range
-else:
-    the_range = sell_range
 
 
-def market_run(lob = lob, test_range = 50, buy_range = buy_range, sell_range = sell_range, ord_load = ord_load)  :
+def market_run(lob = lob, test_range = num_step, buy_range = buy_range, sell_range = sell_range, order = order)  :
     mids = []
     for i in range(test_range):
-        if (i <test_range/3 or i > 3*test_range/4):
+        if (order[0] =='S'):
             the_range = sell_range
         else:
             the_range = buy_range
-        lob = lob_order(lob, the_range, ord_load)
+        lob = lob_order(lob, the_range, order[1])
         mid = midPrice(lob, buy_range, sell_range)
         if print_diagnostics:
             print('mid', mid)
         mids.append(mid)
-    return mids
+    return lob, mids
+
+
 
 
 
@@ -74,11 +76,13 @@ def show_mids(mids):
     plt.ylabel('stock price')
     plt.xlabel('time')
     plt.title("Limit order book trading")
-    plt.ylim(80,120)
+    plt.ylim(85,110)
     plt.show()
 
 if __name__ == "__main__":
-    mids = market_run(lob, 100, buy_range, sell_range)
+    lob, mids = market_run(lob, num_step, buy_range, sell_range, order)
+    order[0]  = 'B'
+    mids = mids + market_run(lob, num_step, buy_range, sell_range, order)[1]
     show_mids(mids=mids)
 
 
