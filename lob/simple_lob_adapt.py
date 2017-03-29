@@ -18,9 +18,10 @@ order = ['S', ord_load]
 if print_diagnostics:
     print(lob)
 
-buy_range = range(ord_range + 1, lob_dim)
-sell_range = range(ord_range, 0, -1)
+buy_range = range(ord_range + 1, lob_dim + 1)
+sell_range = range(ord_range, -1, -1)
 
+#index of the first first non zero entry in a range
 def extrinRange(lob, the_range):
     for k in the_range:
         if lob[k] > 0:

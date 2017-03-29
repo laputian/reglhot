@@ -1,21 +1,22 @@
 import numpy as np
 
-lob_dim = 80
+lob_dim = 20
 start_book_depth = 110.
 start_midPrice = 100.
-tick_size = 1.
+tick_size = 5.
 lob = start_book_depth + np.zeros(lob_dim)
+num_step =20
 
-print_diagnostics = False
+print_diagnostics = True
 
 ord_range = (lob_dim - 1)//2
 
-ord_load = 61
+ord_load = 45
 
 order = ['S', ord_load]
 
-buy_range = range(ord_range + 1, lob_dim)
-sell_range = range(ord_range, 0, -1)
+buy_range = range(ord_range + 1, lob_dim + 1)
+sell_range = range(ord_range, -1, -1)
 
 def extrinRange(lob, the_range):
     for k in the_range:
@@ -52,7 +53,7 @@ else:
     the_range = sell_range
 
 
-def market_run(lob = lob, test_range = 50, buy_range = buy_range, sell_range = sell_range, ord_load = ord_load)  :
+def market_run(lob = lob, test_range = num_step, buy_range = buy_range, sell_range = sell_range, ord_load = ord_load)  :
     mids = []
     for i in range(test_range):
         if (i <test_range/3 or i > 3*test_range/4):
@@ -78,7 +79,7 @@ def show_mids(mids):
     plt.show()
 
 if __name__ == "__main__":
-    mids = market_run(lob, 100, buy_range, sell_range)
+    mids = market_run(lob, num_step, buy_range, sell_range)
     show_mids(mids=mids)
 
 
