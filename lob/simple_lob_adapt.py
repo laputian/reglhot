@@ -11,7 +11,7 @@ print_diagnostics = True
 
 ord_range = (lob_dim - 1)//2
 
-ord_load = 45
+ord_load = 135
 
 order = ['S', ord_load]
 
@@ -32,6 +32,7 @@ def midPrice(lob, buy_range, sell_range, ord_range = ord_range):
     buy_min = start_midPrice + tick_size * (extrinRange(lob, buy_range) - ord_range)
     sell_max = start_midPrice - tick_size * (ord_range - extrinRange(lob, sell_range))
     if print_diagnostics:
+        print(order[0])
         print('extr in sell range', extrinRange(lob, sell_range))
         print('sell_max', sell_max)
         print('extr in buy range',extrinRange(lob, buy_range))
@@ -53,9 +54,14 @@ def lob_order(lob, the_range, ord_residual, ord_range = ord_range):
             break
         ord_residual = ord_hold
     extr = extrinRange(lob, the_range)
+    lob_c = lob.copy()
     step = ord_range - extr + 1
-    for h in range(step if step > 1 else 0):
-        lob[ord_range - h] = lob[ord_range - h -1]
+    if step > 0:
+        for h in range(step if step > 1 else 0):
+            lob[ord_range - h] = lob_c[ord_range - step -h + 1]
+    else:
+        for h in range(-step + 1):
+            lob[ord_range + h +1] = lob_c[ord_range - step + h + 1]
     if print_diagnostics:
         print(lob)
         print('extreme for this order', extrinRange(lob, the_range))
@@ -92,7 +98,10 @@ def show_mids(mids):
 
 if __name__ == "__main__":
     lob, mids = market_run(lob, num_step, buy_range, sell_range, order)
-    order[0]  = 'B'
+    if order[0] == 'B':
+        order[0]  = 'S'
+    else:
+        order[0] = 'B'
     mids = mids + market_run(lob, num_step, buy_range, sell_range, order)[1]
     show_mids(mids=mids)
 
