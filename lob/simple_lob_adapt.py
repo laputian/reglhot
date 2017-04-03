@@ -1,10 +1,10 @@
 import numpy as np
 
 lob_dim = 10
-start_book_depth = 110.
+book_depth = 110.
 start_midPrice = 100.
 tick_size = 1.
-lob = start_book_depth + np.zeros(lob_dim)
+lob = book_depth + np.zeros(lob_dim)
 num_step =50
 
 print_diagnostics = True
@@ -16,6 +16,7 @@ ord_load = 35
 order = ['B', ord_load]
 
 if print_diagnostics:
+    print('load_order', ord_load)
     print(lob)
 
 buy_range = range(ord_range + 1, lob_dim + 1)
@@ -27,11 +28,6 @@ def extrinRange(lob, the_range):
         if lob[k] > 0:
             return k
     return -1
-
-def resetLob(lob, buy_range, sell_range):
-    buy_index = extrinRange(lob, buy_range)
-    sell_index = extrinRange(lob, sell_range)
-    print(buy_index, sell_index)
 
 
 def lob_order(lob, the_range, ord_residual, ord_range = ord_range):
