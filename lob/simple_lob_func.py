@@ -9,7 +9,9 @@ print_diagnostics = True
 base_order = 1000.
 #LOB tick base size
 exp_const = 200
-func_exp = 1.
+#Weber and Rosenow (2005)
+w_r = 0.76
+func_exp = 1./w_r -1
 
 
 def market_order_on_lob(lob_def, order):
@@ -49,9 +51,9 @@ if __name__ == "__main__":
         prices.append(market_order_on_lob(lob_def, order = order)[0])
         expl.append(const *  (base_order ** exp_inv)/ (exp_const ** (exp_inv)) * (k ** (exp_inv)))
     fig, ax = plt.subplots()
-    ax.plot(expl, label="Function - Exp 1/"+ str(func_exp + 1))
+    ax.plot(expl, label="Function - Exp 1/"+ str(round(func_exp + 1, 2)))
     ax.step(range(runs), prices, label="Limit order book")
-    plt.title("Exp = " + str(func_exp))
+    plt.title("Exp = " + str(round(func_exp, 2)))
     plt.xlabel('Market order size')
     plt.ylabel('Price difference')
     legend = ax.legend(loc='lower center', shadow=True, fontsize='x-large')
