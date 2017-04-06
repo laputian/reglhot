@@ -73,18 +73,34 @@ from scipy.integrate import quad
 
 
 class my_pdf(st.rv_continuous):
-    def integrand_func(self, x):
-        return 3
-    def integral(self, integrand):
-        return quad(integrand, 0, 1)
-    def printthis(self):
-        print(self.integral(self. integrand_func))
+    gabaix_exp = 1.53
+    def gabaix_func(self, x):
+        if x >= 1:
+            return x**(- self.gabaix_exp)
+        else:
+            return 0.
+
     def _pdf(self,x):
-        return 1 # Normalized over its range, in this case [0,1]
+        return self.gabaix_func(x)/self.gabaix_exp #/self.measure_integral()[0]# Normalized over its range, in this case [0,1]
 
-my_cv = my_pdf(a=0, b=2, name='my_pdf')
-print(my_cv.mean())
-#print(integral(integrand_func(1)))
+def f(x):
+    return 1
 
-my_cv.printthis()
+def test_distrib():
+    my_cv = my_pdf(a=1, b=100, name='my_pdf')
+    print(my_cv.expect(f))
+    print(my_cv.cdf(1.1))
+    a = my_cv.rvs(size=100)
+    b = np.zeros((100))
+    for k in range(100):
+        b[k] = 100*my_cv.gabaix_func(k+2)
+    print(a)
+    plt.plot(b)
+    plt.plot(a)
+    plt.show()
+
+if __name__ == "__main__":
+    test_distrib()
+
+
 
