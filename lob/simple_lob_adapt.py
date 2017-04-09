@@ -73,9 +73,6 @@ def market_run(lob = lob, test_range = num_step, buy_range = buy_range, sell_ran
     return lob, mids, priceTot
 
 
-
-
-
 import matplotlib.pyplot as plt
 def show_mids(mids, max, min):
     plt.plot(mids)
